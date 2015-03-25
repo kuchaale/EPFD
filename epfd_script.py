@@ -17,7 +17,7 @@ def rmv_mean(arr):
 
 def interp(lev, data, lev_int):
 	f = interp1d(lev[::-1],data[:,::-1,:],axis=1)
-	return f1(lev_int[::-1])[:,::-1,:]
+	return f(lev_int[::-1])[:,::-1,:]
 
 in_file = sys.argv[1] #input file
 scale_by_sqrt_p = True #scaled by square root of (1000/p)
@@ -74,7 +74,7 @@ Fp = np.reshape(f*acphi,(1,1,nlat))*VTHETAzm/THETAp
 
 Fdiv1 = np.transpose(c_diff(np.transpose(Fphi,[2,1,0]), asphi),[2,1,0])
 Fdiv2 = np.transpose(c_diff(np.transpose(Fp,[1,0,2]), lev*100.),[1,0,2])
-Fdiv = Fdiv1 + Fdiv1
+Fdiv = Fdiv1 + Fdiv2
 
 
 #residual circulation
@@ -136,11 +136,11 @@ t.units = units#'days since 1979-01-01 00:00:00.0'
 latitude.units = 'degrees north'
 
 levels.units = 'hPa'
-fx.units = 'K'
-fy.units = 'm/s'
-fd.units = 'm/s'
+fx.units = 'kg/s^2'
+fy.units = 'kg/s^2'
+fd.units = 'm/s^2'
 oc.units = 'Pa/day'
-vc.units = 'Pa/day'
+vc.units = 'm/s'
 
 t[:] = tim
 latitude[:] = lat
