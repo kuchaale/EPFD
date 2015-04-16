@@ -1,8 +1,9 @@
 from netCDF4 import Dataset
-import numpy as np
+import numpy as np #version 1.9.1
 import sys
 from scipy.interpolate import interp1d
 import time
+import bottleneck as bn #version 1.0.0
 
 def c_diff(arr, h):
 #	print arr.shape
@@ -13,7 +14,7 @@ def c_diff(arr, h):
 	return d_arr
 
 def rmv_mean(arr):
-	return arr-np.mean(arr,axis=3)[...,np.newaxis]
+	return arr-bn.nanmean(arr,axis=3)[...,np.newaxis]
 
 def interp(lev, data, lev_int):
 	f = interp1d(lev[::-1],data[:,::-1,:],axis=1)
@@ -41,7 +42,7 @@ nlon = lon.shape[0]
 ntime = tim.shape[0]
 
 theta = t*(np.reshape(lev,(1,nlev,1,1))/1000.)**(-0.286)
-theta_zm = np.mean(theta, axis = 3)
+theta_zm = bn.nanmean(theta, axis = 3)
 loglevel = np.log(lev)
 
 THETAp = np.transpose(c_diff(np.transpose(theta_zm,[1,0,2]), loglevel),[1,0,2])
@@ -54,8 +55,8 @@ THETAza = rmv_mean(theta)
 UV = Uza*Vza
 VTHETA = Vza*THETAza
 
-UVzm = np.mean(UV, axis=3)
-VTHETAzm = np.mean(VTHETA,axis=3)
+UVzm = bn.nanmean(UV, axis=3)
+VTHETAzm = bn.nanmean(VTHETA,axis=3)
 
 #constants
 a = 6.37122e06 
@@ -78,9 +79,9 @@ Fdiv = Fdiv1 + Fdiv2
 
 
 #residual circulation
-Vzm = np.mean(v, axis = 3)
+Vzm = bn.nanmean(v, axis = 3)
 V_res = Vzm - np.transpose(c_diff(np.transpose(VTHETAzm/THETAp,[1,0,2]), lev*100.),[1,0,2])
-Ozm = np.mean(o, axis = 3)
+Ozm = bn.nanmean(o, axis = 3)
 O_res = Ozm + np.transpose(c_diff(np.transpose((VTHETAzm*np.reshape(np.cos(phi),(1,1,nlat)))/THETAp,[2,1,0]),asphi),[2,1,0])
 
 
