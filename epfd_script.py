@@ -102,7 +102,7 @@ else:
 	V_res_int = np.copy(V_res) 
 	O_res_int = np.copy(O_res)
 
-Fdiv_int /= np.reshape(np.cos(phi),(1,1,nlat))   
+Fdiv_int /= np.reshape(a*np.cos(phi),(1,1,nlat))   
 Fp_int = Fp_int*np.reshape(np.cos(phi),(1,1,nlat))   
 Fphi_int = Fphi_int/a
 
