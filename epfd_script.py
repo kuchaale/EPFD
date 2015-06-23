@@ -104,7 +104,7 @@ else:
 
 Fdiv_int /= np.reshape(a*np.cos(phi),(1,1,nlat))   
 Fp_int = Fp_int*np.reshape(np.cos(phi),(1,1,nlat))   
-Fphi_int = Fphi_int/a
+Fphi_int /= a
 
 Fp_int = Fp_int/1.0e5
 Fphi_int = Fphi_int/PI
@@ -137,10 +137,12 @@ t.units = units#'days since 1979-01-01 00:00:00.0'
 latitude.units = 'degrees north'
 
 levels.units = 'hPa'
-fx.units = 'kg/s^2'
-fy.units = 'kg/s^2'
+
+
+fx.units = 'm^2/s^2'
+fy.units = 'm^2/s^2'
 fd.units = 'm/s^2'
-oc.units = 'Pa/day'
+oc.units = 'Pa/s'
 vc.units = 'm/s'
 
 t[:] = tim
